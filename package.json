@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "check:text": "node scripts/check-korean-text.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },
