@@ -2,6 +2,7 @@
 
 html {
   scroll-behavior: smooth;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -9,4 +10,14 @@ body {
   font-family: "Pretendard", "Noto Sans KR", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background-color: #f8faff;
   color: #1f2937;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+pre {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }

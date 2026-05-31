@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "check:text": "node scripts/check-korean-text.mjs",
+    "check:ux": "node scripts/check-mobile-ux.mjs",
     "deploy": "npm run build && firebase deploy",
     "lint": "eslint .",
     "preview": "vite preview"
