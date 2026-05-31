@@ -38,6 +38,34 @@ function PracticeView() {
                 <p className="mt-3 text-base leading-7 text-slate-700">{example.expected}</p>
                 <p className="mt-2 text-sm font-bold leading-6 text-slate-500">{example.tip}</p>
               </Accordion>
+              <Accordion title="나쁜 예시와 개선 방향">
+                <div className="space-y-3">
+                  <div className="rounded-lg bg-rose-50 p-3">
+                    <p className="text-sm font-black text-rose-800">나쁜 프롬프트</p>
+                    <p className="mt-1 text-base leading-7 text-rose-950">{example.badPrompt}</p>
+                  </div>
+                  <div className="rounded-lg bg-teal-50 p-3">
+                    <p className="text-sm font-black text-teal-800">개선 방향</p>
+                    <p className="mt-1 text-base leading-7 text-teal-950">{example.improvedPrompt}</p>
+                  </div>
+                </div>
+              </Accordion>
+              <Accordion title="체크리스트와 점검 질문">
+                <ul className="space-y-2">
+                  {example.checklist.map((item) => (
+                    <li key={item} className="text-base leading-7 text-slate-700">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <ol className="mt-4 list-decimal space-y-2 pl-5">
+                  {example.questions.map((item) => (
+                    <li key={item} className="text-base leading-7 text-slate-700">
+                      {item}
+                    </li>
+                  ))}
+                </ol>
+              </Accordion>
             </div>
           </article>
         ))}

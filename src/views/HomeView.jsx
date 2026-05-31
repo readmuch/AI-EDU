@@ -7,9 +7,9 @@ function HomeView({ onNavigate }) {
       <section className="rounded-lg bg-slate-950 px-5 py-7 text-white md:grid md:grid-cols-[1.15fr_0.85fr] md:items-center md:gap-8 md:px-8 md:py-10">
         <div>
           <p className="text-sm font-black text-teal-300">직장인을 위한 AI 활용 교육</p>
-          <h1 className="mt-3 text-3xl font-black leading-tight md:text-5xl">3단계로 따라가는 실무 AI 학습</h1>
+          <h1 className="mt-3 text-3xl font-black leading-tight md:text-5xl">입문부터 프로젝트까지 이어지는 AI 학습</h1>
           <p className="mt-4 text-base leading-7 text-slate-200 md:max-w-2xl">
-            처음 쓰는 사람도 업무 문서, 회의록, 보고서, 데이터 분석에 AI를 안전하게 적용할 수 있도록 구성했습니다.
+            처음 쓰는 사람도 ChatGPT 기본 사용, 프롬프트 작성, 업무 생산성, 리더십, 실습 프로젝트까지 자연스럽게 따라갈 수 있도록 구성했습니다.
           </p>
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
             <button
@@ -51,8 +51,8 @@ function HomeView({ onNavigate }) {
       <section>
         <SectionHeader
           eyebrow="학습 경로"
-          title="내 상황에 맞는 단계부터 시작하세요"
-          desc="각 단계는 독립적으로 볼 수 있지만, 처음이라면 1단계부터 보는 것이 가장 안전합니다."
+          title="내 상황에 맞는 과정부터 시작하세요"
+          desc="각 과정은 독립적으로 볼 수 있지만, 처음이라면 AI 입문과 ChatGPT 101부터 보는 것이 가장 안전합니다."
         />
         <div className="grid gap-3 md:grid-cols-3">
           {learningLevels.map((level) => (

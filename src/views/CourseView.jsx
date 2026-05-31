@@ -55,6 +55,16 @@ function CourseView() {
           </ul>
         </Accordion>
 
+        <Accordion title="핵심 개념 설명" defaultOpen>
+          <ul className="space-y-2">
+            {activeLevel.concepts.map((item) => (
+              <li key={item} className="text-base leading-7 text-slate-700">
+                {item}
+              </li>
+            ))}
+          </ul>
+        </Accordion>
+
         <Accordion title="일자별 시간표" defaultOpen>
           <div className="space-y-3">
             {activeLevel.schedule.map((item) => (
@@ -77,11 +87,87 @@ function CourseView() {
           </ul>
         </Accordion>
 
+        <Accordion title="실무 예시">
+          <ul className="space-y-2">
+            {activeLevel.examples.map((item) => (
+              <li key={item} className="text-base leading-7 text-slate-700">
+                {item}
+              </li>
+            ))}
+          </ul>
+        </Accordion>
+
+        <Accordion title="따라 해볼 실습 과제">
+          <p className="text-base leading-7 text-slate-700">{activeLevel.practice}</p>
+        </Accordion>
+
+        <Accordion title="좋은 프롬프트 예시">
+          <pre className="whitespace-pre-wrap break-words rounded-lg bg-slate-950 p-4 text-sm leading-6 text-white">
+            {activeLevel.goodPrompt}
+          </pre>
+        </Accordion>
+
+        <Accordion title="나쁜 프롬프트와 개선 예시">
+          <div className="space-y-3">
+            <div className="rounded-lg bg-rose-50 p-3">
+              <p className="text-sm font-black text-rose-800">나쁜 예시</p>
+              <p className="mt-1 text-base leading-7 text-rose-950">{activeLevel.promptComparison.bad}</p>
+            </div>
+            <div className="rounded-lg bg-teal-50 p-3">
+              <p className="text-sm font-black text-teal-800">개선 예시</p>
+              <p className="mt-1 text-base leading-7 text-teal-950">{activeLevel.promptComparison.improved}</p>
+            </div>
+            <p className="text-base leading-7 text-slate-700">{activeLevel.promptComparison.reason}</p>
+          </div>
+        </Accordion>
+
+        <Accordion title="체크리스트">
+          <ul className="space-y-2">
+            {activeLevel.checklist.map((item) => (
+              <li key={item} className="text-base leading-7 text-slate-700">
+                {item}
+              </li>
+            ))}
+          </ul>
+        </Accordion>
+
+        <Accordion title="이해도 점검 질문">
+          <ol className="list-decimal space-y-2 pl-5">
+            {activeLevel.questions.map((item) => (
+              <li key={item} className="text-base leading-7 text-slate-700">
+                {item}
+              </li>
+            ))}
+          </ol>
+        </Accordion>
+
+        <Accordion title="다음 단계 학습 제안">
+          <ul className="space-y-2">
+            {activeLevel.nextSteps.map((item) => (
+              <li key={item} className="text-base leading-7 text-slate-700">
+                {item}
+              </li>
+            ))}
+          </ul>
+        </Accordion>
+
         <Accordion title="평가 기준">
           <ul className="space-y-2">
             {activeLevel.evaluation.map((item) => (
               <li key={item} className="text-base leading-7 text-slate-700">
                 {item}
+              </li>
+            ))}
+          </ul>
+        </Accordion>
+
+        <Accordion title="참고 자료">
+          <ul className="space-y-2">
+            {activeLevel.references.map((item) => (
+              <li key={item.url} className="text-base leading-7 text-slate-700">
+                <a className="font-bold text-indigo-700 underline underline-offset-4" href={item.url} target="_blank" rel="noreferrer">
+                  {item.name}
+                </a>
               </li>
             ))}
           </ul>
