@@ -6,6 +6,16 @@ import { learningLevels } from "../data/mobileCourseData"
 function CourseView({ selectedLevelId }) {
   const [activeId, setActiveId] = useState(selectedLevelId ?? learningLevels[0].id)
   const activeLevel = learningLevels.find((level) => level.id === activeId) ?? learningLevels[0]
+  const getLessonId = (index) => `${activeLevel.id}-lesson-${index + 1}`
+
+  const handleLessonJump = (index) => {
+    const lessonElement = document.getElementById(getLessonId(index))
+    lessonElement?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    })
+    lessonElement?.focus({ preventScroll: true })
+  }
 
   return (
     <div className="space-y-5">
@@ -58,12 +68,17 @@ function CourseView({ selectedLevelId }) {
 
         <Accordion title="교시별 시간표" defaultOpen>
           <div className="space-y-3">
-            {activeLevel.schedule.map((item) => (
-              <div key={`${item.time}-${item.title}`} className="rounded-lg bg-slate-50 p-3">
+            {activeLevel.schedule.map((item, index) => (
+              <button
+                key={`${item.time}-${item.title}`}
+                type="button"
+                onClick={() => handleLessonJump(index)}
+                className="w-full rounded-lg bg-slate-50 p-3 text-left transition hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              >
                 <p className="text-sm font-black text-indigo-700">{item.time}</p>
                 <p className="mt-1 text-base font-black text-slate-950">{item.title}</p>
                 <p className="mt-1 text-base leading-7 text-slate-600">{item.detail}</p>
-              </div>
+              </button>
             ))}
           </div>
         </Accordion>
@@ -81,7 +96,12 @@ function CourseView({ selectedLevelId }) {
         <Accordion title="교시별 상세 강의자료" defaultOpen>
           <div className="space-y-4">
             {activeLevel.lessons.map((lessonItem, index) => (
-              <article key={lessonItem.title} className="rounded-lg border border-slate-200 bg-white p-4">
+              <article
+                key={lessonItem.title}
+                id={getLessonId(index)}
+                tabIndex={-1}
+                className="scroll-mt-24 rounded-lg border border-slate-200 bg-white p-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              >
                 <p className="text-sm font-black text-indigo-700">{index + 1}교시 강의자료</p>
                 <h4 className="mt-1 text-xl font-black text-slate-950">{lessonItem.title}</h4>
 
