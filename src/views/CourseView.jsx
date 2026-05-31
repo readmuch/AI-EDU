@@ -11,8 +11,8 @@ function CourseView() {
     <div className="space-y-5">
       <SectionHeader
         eyebrow="과정"
-        title="단계별 커리큘럼"
-        desc="모바일에서는 필요한 항목만 펼쳐 읽을 수 있게 구성했습니다."
+        title="과정별 커리큘럼"
+        desc="각 과정은 교시별 강의자료, 실습, 퀴즈, 산출물까지 바로 수업에 활용할 수 있게 구성했습니다."
       />
 
       <div className="flex gap-2 overflow-x-auto pb-1">
@@ -23,7 +23,7 @@ function CourseView() {
               key={level.id}
               type="button"
               onClick={() => setActiveId(level.id)}
-              className={`min-h-12 min-w-32 rounded-lg px-4 py-3 text-left transition ${
+              className={`min-h-12 min-w-36 rounded-lg px-4 py-3 text-left transition ${
                 isActive ? "bg-slate-950 text-white" : "border border-slate-200 bg-white text-slate-700"
               }`}
             >
@@ -42,6 +42,7 @@ function CourseView() {
           <span className="rounded-md bg-teal-50 px-2 py-1 text-sm font-bold text-teal-800">{activeLevel.duration}</span>
         </div>
         <p className="mt-4 text-base leading-7 text-slate-700">{activeLevel.summary}</p>
+        <p className="mt-3 rounded-lg bg-teal-50 p-3 text-sm font-bold leading-6 text-teal-900">{activeLevel.outcome}</p>
       </article>
 
       <div className="space-y-3">
@@ -55,17 +56,7 @@ function CourseView() {
           </ul>
         </Accordion>
 
-        <Accordion title="핵심 개념 설명" defaultOpen>
-          <ul className="space-y-2">
-            {activeLevel.concepts.map((item) => (
-              <li key={item} className="text-base leading-7 text-slate-700">
-                {item}
-              </li>
-            ))}
-          </ul>
-        </Accordion>
-
-        <Accordion title="일자별 시간표" defaultOpen>
+        <Accordion title="교시별 시간표" defaultOpen>
           <div className="space-y-3">
             {activeLevel.schedule.map((item) => (
               <div key={`${item.time}-${item.title}`} className="rounded-lg bg-slate-50 p-3">
@@ -77,9 +68,9 @@ function CourseView() {
           </div>
         </Accordion>
 
-        <Accordion title="실습 자료">
+        <Accordion title="핵심 개념 설명" defaultOpen>
           <ul className="space-y-2">
-            {activeLevel.materials.map((item) => (
+            {activeLevel.concepts.map((item) => (
               <li key={item} className="text-base leading-7 text-slate-700">
                 {item}
               </li>
@@ -87,18 +78,123 @@ function CourseView() {
           </ul>
         </Accordion>
 
-        <Accordion title="실무 예시">
-          <ul className="space-y-2">
-            {activeLevel.examples.map((item) => (
-              <li key={item} className="text-base leading-7 text-slate-700">
-                {item}
-              </li>
-            ))}
-          </ul>
-        </Accordion>
+        <Accordion title="교시별 상세 강의자료" defaultOpen>
+          <div className="space-y-4">
+            {activeLevel.lessons.map((lessonItem, index) => (
+              <article key={lessonItem.title} className="rounded-lg border border-slate-200 bg-white p-4">
+                <p className="text-sm font-black text-indigo-700">{index + 1}교시 강의자료</p>
+                <h4 className="mt-1 text-xl font-black text-slate-950">{lessonItem.title}</h4>
 
-        <Accordion title="따라 해볼 실습 과제">
-          <p className="text-base leading-7 text-slate-700">{activeLevel.practice}</p>
+                <div className="mt-4 rounded-lg bg-slate-50 p-3">
+                  <p className="text-sm font-black text-slate-500">주제</p>
+                  <p className="mt-1 text-base font-bold leading-7 text-slate-900">{lessonItem.topic}</p>
+                </div>
+
+                <div className="mt-4">
+                  <p className="text-base font-black text-slate-950">수업 목표</p>
+                  <ol className="mt-2 list-decimal space-y-2 pl-5">
+                    {lessonItem.goals.map((goal) => (
+                      <li key={goal} className="text-base leading-7 text-slate-700">
+                        {goal}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+
+                <div className="mt-5 space-y-4">
+                  {lessonItem.sections.map((section) => (
+                    <section key={section.heading}>
+                      <h5 className="text-base font-black text-slate-950">{section.heading}</h5>
+                      <p className="mt-2 text-base leading-7 text-slate-700">{section.body}</p>
+                      {section.points ? (
+                        <ul className="mt-2 space-y-1">
+                          {section.points.map((point) => (
+                            <li key={point} className="text-base leading-7 text-slate-700">
+                              {point}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
+                    </section>
+                  ))}
+                </div>
+
+                {lessonItem.comparisonTable ? (
+                  <div className="mt-5 overflow-x-auto rounded-lg border border-slate-200">
+                    <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
+                      <thead className="bg-slate-50">
+                        <tr>
+                          {lessonItem.comparisonTable.headers.map((header) => (
+                            <th key={header} className="px-3 py-3 font-black text-slate-700">
+                              {header}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 bg-white">
+                        {lessonItem.comparisonTable.rows.map((row) => (
+                          <tr key={row.join("-")}>
+                            {row.map((cell) => (
+                              <td key={cell} className="px-3 py-3 align-top leading-6 text-slate-700">
+                                {cell}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : null}
+
+                <div className="mt-5">
+                  <p className="text-base font-black text-slate-950">업무 예시</p>
+                  <div className="mt-2 grid gap-2 md:grid-cols-2">
+                    {lessonItem.examples.map((example) => (
+                      <div key={example.title} className="rounded-lg bg-amber-50 p-3">
+                        <p className="text-sm font-black text-amber-800">{example.title}</p>
+                        <p className="mt-1 text-base leading-7 text-amber-950">{example.detail}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-5 rounded-lg bg-teal-50 p-3">
+                  <p className="text-base font-black text-teal-900">실습: {lessonItem.activity.title}</p>
+                  <ul className="mt-2 space-y-2">
+                    {lessonItem.activity.steps.map((step) => (
+                      <li key={step} className="text-base leading-7 text-teal-950">
+                        {step}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-3 text-sm font-black text-teal-800">결과물: {lessonItem.activity.output}</p>
+                </div>
+
+                <div className="mt-5">
+                  <p className="text-base font-black text-slate-950">이해 확인 퀴즈</p>
+                  <div className="mt-2 space-y-2">
+                    {lessonItem.quiz.map((quiz) => (
+                      <div key={quiz.q} className="rounded-lg bg-slate-50 p-3">
+                        <p className="text-base font-bold leading-7 text-slate-900">Q. {quiz.q}</p>
+                        <p className="mt-1 text-base leading-7 text-slate-600">정답: {quiz.a}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-5 rounded-lg bg-slate-950 p-4 text-white">
+                  <p className="text-base font-black">마무리 정리</p>
+                  <ul className="mt-2 space-y-2">
+                    {lessonItem.summary.map((item) => (
+                      <li key={item} className="text-base leading-7 text-slate-100">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
+            ))}
+          </div>
         </Accordion>
 
         <Accordion title="좋은 프롬프트 예시">
@@ -126,48 +222,6 @@ function CourseView() {
             {activeLevel.checklist.map((item) => (
               <li key={item} className="text-base leading-7 text-slate-700">
                 {item}
-              </li>
-            ))}
-          </ul>
-        </Accordion>
-
-        <Accordion title="이해도 점검 질문">
-          <ol className="list-decimal space-y-2 pl-5">
-            {activeLevel.questions.map((item) => (
-              <li key={item} className="text-base leading-7 text-slate-700">
-                {item}
-              </li>
-            ))}
-          </ol>
-        </Accordion>
-
-        <Accordion title="다음 단계 학습 제안">
-          <ul className="space-y-2">
-            {activeLevel.nextSteps.map((item) => (
-              <li key={item} className="text-base leading-7 text-slate-700">
-                {item}
-              </li>
-            ))}
-          </ul>
-        </Accordion>
-
-        <Accordion title="평가 기준">
-          <ul className="space-y-2">
-            {activeLevel.evaluation.map((item) => (
-              <li key={item} className="text-base leading-7 text-slate-700">
-                {item}
-              </li>
-            ))}
-          </ul>
-        </Accordion>
-
-        <Accordion title="참고 자료">
-          <ul className="space-y-2">
-            {activeLevel.references.map((item) => (
-              <li key={item.url} className="text-base leading-7 text-slate-700">
-                <a className="font-bold text-indigo-700 underline underline-offset-4" href={item.url} target="_blank" rel="noreferrer">
-                  {item.name}
-                </a>
               </li>
             ))}
           </ul>
