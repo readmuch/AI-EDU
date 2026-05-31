@@ -56,7 +56,12 @@ function HomeView({ onNavigate }) {
         />
         <div className="grid gap-3 md:grid-cols-3">
           {learningLevels.map((level) => (
-            <article key={level.id} className="rounded-lg border border-slate-200 bg-white p-4">
+            <button
+              key={level.id}
+              type="button"
+              onClick={() => onNavigate("course", { courseId: level.id })}
+              className="rounded-lg border border-slate-200 bg-white p-4 text-left transition hover:border-indigo-300 hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="text-sm font-black text-indigo-700">{level.step}</p>
@@ -66,7 +71,7 @@ function HomeView({ onNavigate }) {
               </div>
               <p className="mt-3 text-base leading-7 text-slate-600">{level.summary}</p>
               <p className="mt-3 rounded-lg bg-teal-50 p-3 text-sm font-bold leading-6 text-teal-900">{level.outcome}</p>
-            </article>
+            </button>
           ))}
         </div>
       </section>

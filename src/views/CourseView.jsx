@@ -3,8 +3,8 @@ import Accordion from "../components/mobile/Accordion"
 import SectionHeader from "../components/mobile/SectionHeader"
 import { learningLevels } from "../data/mobileCourseData"
 
-function CourseView() {
-  const [activeId, setActiveId] = useState(learningLevels[0].id)
+function CourseView({ selectedLevelId }) {
+  const [activeId, setActiveId] = useState(selectedLevelId ?? learningLevels[0].id)
   const activeLevel = learningLevels.find((level) => level.id === activeId) ?? learningLevels[0]
 
   return (

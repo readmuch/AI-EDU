@@ -10,6 +10,7 @@ import TemplateView from "./views/TemplateView"
 
 function App() {
   const [activeTab, setActiveTab] = useState("home")
+  const [selectedCourseId, setSelectedCourseId] = useState(null)
   const mainRef = useRef(null)
 
   const activeLabel = useMemo(() => {
@@ -21,14 +22,17 @@ function App() {
     window.scrollTo({ top: 0, behavior: "smooth" })
   }, [activeTab])
 
-  const handleNavigate = (tabId) => {
+  const handleNavigate = (tabId, options = {}) => {
+    if (tabId === "course" && options.courseId) {
+      setSelectedCourseId(options.courseId)
+    }
     setActiveTab(tabId)
   }
 
   const renderActiveView = () => {
     switch (activeTab) {
       case "course":
-        return <CourseView />
+        return <CourseView selectedLevelId={selectedCourseId} />
       case "practice":
         return <PracticeView />
       case "templates":
