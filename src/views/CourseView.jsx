@@ -1,12 +1,48 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Accordion from "../components/mobile/Accordion"
 import SectionHeader from "../components/mobile/SectionHeader"
-import { learningLevels } from "../data/mobileCourseData"
+import { advancedLearningLevels, learningLevels } from "../data/mobileCourseData"
+
+const trackOptions = [
+  {
+    id: "foundation",
+    eyebrow: "기본 과정",
+    title: "입문부터 프로젝트까지",
+    desc: "AI 입문, ChatGPT, 프롬프트, 업무 적용, 프로젝트까지 순서대로 봅니다.",
+  },
+  {
+    id: "advanced",
+    eyebrow: "심화 과정",
+    title: "Agent with Workflow",
+    desc: "Module 0~11을 따라 Agent Workflow 설계 역량을 쌓습니다.",
+  },
+]
+
+const getTrackIdByLevelId = (levelId) => {
+  if (advancedLearningLevels.some((level) => level.id === levelId) || levelId === "agent-workflow") {
+    return "advanced"
+  }
+
+  return "foundation"
+}
 
 function CourseView({ selectedLevelId }) {
-  const [activeId, setActiveId] = useState(selectedLevelId ?? learningLevels[0].id)
-  const activeLevel = learningLevels.find((level) => level.id === activeId) ?? learningLevels[0]
+  const [activeTrackId, setActiveTrackId] = useState(getTrackIdByLevelId(selectedLevelId))
+  const activeLevels = activeTrackId === "advanced" ? advancedLearningLevels : learningLevels
+  const fallbackLevelId = activeLevels[0].id
+  const [activeId, setActiveId] = useState(selectedLevelId === "agent-workflow" ? advancedLearningLevels[0].id : selectedLevelId ?? fallbackLevelId)
+  const activeLevel = activeLevels.find((level) => level.id === activeId) ?? activeLevels[0]
+  const activeTrack = trackOptions.find((track) => track.id === activeTrackId) ?? trackOptions[0]
   const getLessonId = (index) => `${activeLevel.id}-lesson-${index + 1}`
+
+  useEffect(() => {
+    const nextTrackId = getTrackIdByLevelId(selectedLevelId)
+    const nextLevels = nextTrackId === "advanced" ? advancedLearningLevels : learningLevels
+    const nextLevelId = selectedLevelId === "agent-workflow" ? nextLevels[0].id : selectedLevelId ?? nextLevels[0].id
+
+    setActiveTrackId(nextTrackId)
+    setActiveId(nextLevels.some((level) => level.id === nextLevelId) ? nextLevelId : nextLevels[0].id)
+  }, [selectedLevelId])
 
   const handleLessonJump = (index) => {
     const lessonElement = document.getElementById(getLessonId(index))
@@ -17,16 +53,44 @@ function CourseView({ selectedLevelId }) {
     lessonElement?.focus({ preventScroll: true })
   }
 
+  const handleTrackChange = (trackId) => {
+    const nextLevels = trackId === "advanced" ? advancedLearningLevels : learningLevels
+    setActiveTrackId(trackId)
+    setActiveId(nextLevels[0].id)
+  }
+
   return (
     <div className="space-y-5">
       <SectionHeader
         eyebrow="과정"
         title="과정별 커리큘럼"
-        desc="각 과정은 교시별 강의자료, 실습, 퀴즈, 산출물까지 바로 수업에 활용할 수 있게 구성했습니다."
+        desc="기본 과정과 심화 과정을 먼저 고른 뒤, 각 과정 또는 모듈의 강의자료와 실습을 확인합니다."
       />
 
+      <div className="grid gap-3 md:grid-cols-2">
+        {trackOptions.map((track) => {
+          const isActive = track.id === activeTrackId
+          return (
+            <button
+              key={track.id}
+              type="button"
+              onClick={() => handleTrackChange(track.id)}
+              className={`rounded-lg p-4 text-left transition focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
+                isActive ? "bg-slate-950 text-white" : "border border-slate-200 bg-white text-slate-800 hover:border-indigo-300"
+              }`}
+            >
+              <span className="text-sm font-black opacity-80">{track.eyebrow}</span>
+              <span className="mt-1 block text-xl font-black">{track.title}</span>
+              <span className={`mt-2 block text-sm font-bold leading-6 ${isActive ? "text-slate-200" : "text-slate-500"}`}>{track.desc}</span>
+            </button>
+          )
+        })}
+      </div>
+
+      <div className="rounded-lg border border-slate-200 bg-white p-3">
+        <p className="px-1 pb-3 text-sm font-black text-indigo-700">{activeTrack.eyebrow}</p>
       <div className="flex gap-2 overflow-x-auto pb-1">
-        {learningLevels.map((level) => {
+        {activeLevels.map((level) => {
           const isActive = level.id === activeId
           return (
             <button
@@ -42,6 +106,7 @@ function CourseView({ selectedLevelId }) {
             </button>
           )
         })}
+      </div>
       </div>
 
       <article className="rounded-lg border border-slate-200 bg-white p-4 md:p-5">

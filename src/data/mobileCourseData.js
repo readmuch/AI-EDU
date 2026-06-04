@@ -1,5 +1,6 @@
 import { introCourseLessons } from "./introCourseLessons"
 import { expandedCourseLessons } from "./expandedCourseLessons"
+import { agentWorkflowModuleLevels } from "./agentWorkflowCourse"
 
 export const legacyAiTermsLesson = {
   title: "AI 용어 정리",
@@ -265,6 +266,29 @@ AI, 생성형 AI, LLM, 챗봇, 자동화의 차이를 업무 예시 중심으로
     materials: ["프로젝트 캔버스", "프롬프트 체인 템플릿", "테스트 로그 양식"],
     evaluation: ["입력-처리-검토-출력 흐름이 명확한가?", "다른 사람이 재사용할 수 있는가?", "개선 기록이 있는가?"],
     references: [{ name: "OpenAI Academy", url: "https://academy.openai.com/" }],
+  },
+]
+
+export const advancedLearningLevels = agentWorkflowModuleLevels
+
+export const courseTracks = [
+  {
+    id: "foundation",
+    badge: "기본 과정",
+    title: "입문부터 프로젝트까지 이어지는 AI 학습",
+    desc: "AI를 처음 쓰는 직장인도 용어, ChatGPT 사용, 프롬프트, 업무 적용, 프로젝트까지 순서대로 익힙니다.",
+    courseId: "ai-basics",
+    action: "기본 과정 보기",
+    points: ["AI 용어와 안전한 사용 원칙", "ChatGPT 101과 프롬프트 기초", "업무 생산성 실습과 개인 프로젝트"],
+  },
+  {
+    id: "advanced",
+    badge: "심화 과정",
+    title: "Agent with Workflow",
+    desc: "단일 프롬프트를 넘어 Agent, 도구, 데이터, 검증, 승인 흐름을 연결해 실제 업무용 워크플로우를 설계합니다.",
+    courseId: "agent-workflow-module-0",
+    action: "심화 과정 보기",
+    points: ["Agent Workflow 설계", "Tool Calling, RAG, Memory", "Evaluation, Guardrails, Capstone"],
   },
 ]
 
