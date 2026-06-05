@@ -1,12 +1,21 @@
-import { useEffect, useMemo, useRef, useState } from "react"
+import { Suspense, lazy, useEffect, useMemo, useRef, useState } from "react"
 import BottomNavigation from "./components/mobile/BottomNavigation"
 import DesktopNavigation from "./components/mobile/DesktopNavigation"
-import { navigationTabs } from "./data/mobileCourseData"
-import CourseView from "./views/CourseView"
-import FaqView from "./views/FaqView"
-import HomeView from "./views/HomeView"
-import PracticeView from "./views/PracticeView"
-import TemplateView from "./views/TemplateView"
+import { navigationTabs } from "./data/navigationData"
+
+const CourseView = lazy(() => import("./views/CourseView"))
+const FaqView = lazy(() => import("./views/FaqView"))
+const HomeView = lazy(() => import("./views/HomeView"))
+const PracticeView = lazy(() => import("./views/PracticeView"))
+const TemplateView = lazy(() => import("./views/TemplateView"))
+
+function ViewLoading() {
+  return (
+    <div className="flex min-h-[60vh] items-center justify-center text-sm font-semibold text-slate-500" role="status">
+      화면을 불러오는 중...
+    </div>
+  )
+}
 
 function App() {
   const [activeTab, setActiveTab] = useState("home")
@@ -54,7 +63,7 @@ function App() {
         aria-label={`${activeLabel} 화면`}
         className="mx-auto w-full max-w-6xl px-4 pb-28 pt-4 outline-none md:px-6 md:pb-12 md:pt-8"
       >
-        {renderActiveView()}
+        <Suspense fallback={<ViewLoading />}>{renderActiveView()}</Suspense>
       </main>
       <BottomNavigation tabs={navigationTabs} activeTab={activeTab} onChange={handleNavigate} />
     </div>
