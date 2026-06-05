@@ -1456,6 +1456,443 @@ const detailedModuleLessonsByIndex = {
 
 const getDetailedModuleLessons = (index) => detailedModuleLessonsByIndex[index]
 
+const moduleSupportMaterialsByIndex = {
+  0: {
+    templateTitle: "웹 요청 분석 템플릿",
+    template: `서비스명: [분석할 웹 서비스]
+분류: [웹사이트 / 웹앱 / 하이브리드]
+
+1. 사용자의 주요 행동
+- [읽기 / 입력 / 저장 / 공유 / 결제 등]
+
+2. 요청과 응답 흐름
+- 사용자 행동:
+- 브라우저 요청:
+- 서버 응답:
+- 화면 변화:
+
+3. 상태 저장 여부
+- 저장되는 데이터:
+- 저장 위치 추정:
+- DB가 필요한 이유:
+
+4. DevTools 확인 항목
+- Network:
+- Application:
+- Console:`,
+    comparisonTitle: "잘못된 웹 분류와 개선 예시",
+    badLabel: "나쁜 분류",
+    bad: "Gmail은 웹에서 보이니까 웹사이트다. React로 만들면 웹앱이고, 정적인 화면이면 백엔드가 필요 없다.",
+    improvedLabel: "개선 분류",
+    improved: "Gmail은 사용자의 메일 작성, 전송, 읽음 상태, 검색, 로그인 상태를 처리하고 저장하므로 웹 애플리케이션이다. 콘텐츠 조회 중심인지, 사용자 행동과 상태 저장 중심인지로 판단한다.",
+    reason: "Module 0은 Agent 설계 전에 웹 업무가 실제로 어떻게 요청, 응답, 상태 저장으로 움직이는지 보는 기초 모듈이므로 웹 분석 산출물이 더 적합합니다.",
+    checklistTitle: "웹 기초 점검 체크리스트",
+    checklist: ["웹사이트와 웹앱을 사용자 행동 기준으로 구분했는가?", "요청과 응답 흐름을 설명할 수 있는가?", "상태 저장이 필요한 데이터를 찾았는가?", "쿠키, 세션, Storage의 역할을 구분했는가?", "DevTools에서 Network와 Application 탭을 확인했는가?"],
+  },
+  1: {
+    templateTitle: "Workflow Map 템플릿",
+    template: `업무명: [반복 업무]
+현재 문제: [소요 시간 / 오류 / 병목]
+
+1. 시작 조건
+- 언제 이 업무가 시작되는가:
+
+2. 입력
+- 필수 입력:
+- 선택 입력:
+- 누락 시 질문:
+
+3. 정상 흐름
+1) [단계명] -> 출력:
+2) [단계명] -> 출력:
+3) [단계명] -> 출력:
+
+4. 분기와 예외
+- 분기 기준:
+- 예외 상황:
+- 실패 시 다음 행동:
+
+5. 검증과 승인
+- 자동 검증:
+- 사람 승인:
+- 완료 조건:`,
+    comparisonTitle: "나쁜 Workflow와 개선 예시",
+    badLabel: "나쁜 설계",
+    bad: "고객 문의가 오면 AI가 알아서 분류하고 답변하고 발송한다.",
+    improvedLabel: "개선 설계",
+    improved: "고객 문의 접수 -> 필수 정보 확인 -> 유형 분류 -> 정책 근거 조회 -> 답변 초안 생성 -> 위험 표현 검토 -> 상담원 승인 -> 발송 대기 순서로 나누고, 환불/장애/법무 위험은 별도 승인 경로로 보낸다.",
+    reason: "Module 1의 핵심은 프롬프트 문장이 아니라 실행 가능한 업무 흐름, 분기, 예외, 승인 지점을 만드는 것입니다.",
+    checklistTitle: "Workflow 설계 체크리스트",
+    checklist: ["시작 조건과 완료 조건이 명확한가?", "각 단계의 입력과 출력이 정의됐는가?", "정상 흐름과 예외 흐름이 모두 있는가?", "분기 기준이 테스트 가능한가?", "사람 승인 지점이 표시됐는가?"],
+  },
+  2: {
+    templateTitle: "Prompt Chain 템플릿",
+    template: `체인명: [업무용 프롬프트 체인]
+
+1. 입력 정리 프롬프트
+- 목적:
+- 추출 필드:
+- 누락 정보 처리:
+
+2. 초안 생성 프롬프트
+- 대상:
+- 톤:
+- 출력 형식:
+- 추정 금지 조건:
+
+3. 검토 프롬프트
+- 사실 오류:
+- 누락:
+- 위험 표현:
+- 형식 위반:
+
+4. 수정 프롬프트
+- 유지할 내용:
+- 수정할 내용:
+- 삭제할 표현:
+
+5. 최종 형식화
+- 최종 사용 채널:
+- 최종본 형식:
+- 내부 메모 분리:`,
+    comparisonTitle: "나쁜 Prompt Chain과 개선 예시",
+    badLabel: "나쁜 예시",
+    bad: "아래 자료로 보고서 잘 써줘. 빠진 것도 알아서 채워줘.",
+    improvedLabel: "개선 예시",
+    improved: "입력 정리, 초안 생성, 검토, 수정, 최종 형식화를 분리하고 각 단계의 출력 형식과 추정 금지 조건을 둔다.",
+    reason: "Module 2는 프롬프트 자체가 핵심이지만, 단일 프롬프트가 아니라 단계별 체인과 검토 가능성이 핵심입니다.",
+    checklistTitle: "Prompt Chain 체크리스트",
+    checklist: ["입력 정리와 초안 생성이 분리됐는가?", "검토 프롬프트가 수정 프롬프트와 분리됐는가?", "각 단계의 출력 형식이 고정됐는가?", "실패한 단계만 재실행할 수 있는가?", "체인 평가 기준이 있는가?"],
+  },
+  3: {
+    templateTitle: "Tool Calling 설계 템플릿",
+    template: `도구명: [tool name]
+사용 목적: [왜 필요한가]
+
+1. 호출 조건
+- 언제 호출하는가:
+- 호출하지 말아야 할 때:
+
+2. 입력 스키마
+- 필수값:
+- 선택값:
+- 금지값:
+- 누락 시 질문:
+
+3. 권한
+- 읽기/쓰기:
+- 승인 필요 여부:
+- 금지 행동:
+
+4. 결과 검증
+- 성공 기준:
+- 실패 상태:
+- 대체 경로:
+
+5. 로그
+- 남길 항목:
+- 마스킹 항목:`,
+    comparisonTitle: "나쁜 Tool 설계와 개선 예시",
+    badLabel: "나쁜 설계",
+    bad: "필요하면 Agent가 사내 시스템을 검색하고 수정하고 발송까지 하게 한다.",
+    improvedLabel: "개선 설계",
+    improved: "정책 검색은 읽기 전용 도구로 허용하고, 고객 데이터 수정과 외부 발송은 금지하거나 사람 승인 후 실행한다. 각 도구마다 입력 스키마, 호출 조건, 실패 처리, 로그를 둔다.",
+    reason: "Module 3은 프롬프트보다 도구의 권한, 호출 조건, 결과 검증이 핵심입니다.",
+    checklistTitle: "Tool 안전 체크리스트",
+    checklist: ["도구 호출 조건이 명확한가?", "읽기 도구와 쓰기 도구가 분리됐는가?", "입력 스키마와 누락 처리 규칙이 있는가?", "도구 실패 시 대체 경로가 있는가?", "호출 로그와 민감정보 마스킹 기준이 있는가?"],
+  },
+  4: {
+    templateTitle: "Context/Memory 분류표",
+    template: `정보 항목: [예: 고객명, 보고서 형식, 정책 규칙]
+
+1. 분류
+- Context / Memory / 저장 금지:
+
+2. 민감도
+- 공개 / 내부 / 민감 / 개인정보:
+
+3. 사용 목적
+- 현재 작업에서 필요한 이유:
+- 반복 저장이 필요한 이유:
+
+4. 보관 기준
+- 보관 위치:
+- 보관 기간:
+- 갱신 주기:
+- 삭제 조건:
+
+5. 안전 규칙
+- 마스킹:
+- 접근 권한:
+- 충돌 시 우선순위:`,
+    comparisonTitle: "나쁜 Memory 설계와 개선 예시",
+    badLabel: "나쁜 설계",
+    bad: "고객별 계약 조건과 개인정보를 Memory에 저장해 다음 제안서에 자동으로 활용한다.",
+    improvedLabel: "개선 설계",
+    improved: "회사 보고서 형식과 문체 규칙은 Memory에 저장하고, 고객명/계약 조건/개인정보는 작업 Context로만 처리한 뒤 저장하지 않는다.",
+    reason: "Module 4는 무엇을 기억할지가 아니라 무엇을 잊어야 안전한지가 중요한 모듈입니다.",
+    checklistTitle: "Data/Memory 체크리스트",
+    checklist: ["Context와 Memory가 분리됐는가?", "개인정보와 고객별 조건을 저장 금지로 분류했는가?", "Memory 갱신과 삭제 기준이 있는가?", "컨텍스트 출처별 우선순위가 있는가?", "데이터 최소화 원칙을 적용했는가?"],
+  },
+  5: {
+    templateTitle: "RAG Workflow 템플릿",
+    template: `질문 유형: [사용자 질문]
+
+1. 검색 전 처리
+- 질문 의도:
+- 검색 키워드:
+- 문서 범위:
+
+2. 검색
+- 대상 문서:
+- 필터:
+- 관련성 기준:
+
+3. 근거 선택
+- 사용할 근거:
+- 제외한 근거:
+- 충돌 여부:
+
+4. 답변 생성
+- 근거 안에서만 답변:
+- 출처 표시:
+- 답변 불가 조건:
+
+5. 검증
+- 출처 일치:
+- 최신성:
+- 확인 필요:`,
+    comparisonTitle: "나쁜 RAG 응답과 개선 예시",
+    badLabel: "나쁜 예시",
+    bad: "검색 결과가 부족해도 모델이 아는 내용으로 자연스럽게 답변한다.",
+    improvedLabel: "개선 예시",
+    improved: "검색된 최신 문서 범위 안에서만 답변하고, 근거가 부족하거나 문서가 충돌하면 확인 필요로 표시한다. 답변에는 문서명, 섹션, 업데이트 날짜를 함께 남긴다.",
+    reason: "Module 5는 답변의 유창함보다 검색 근거, 출처, 답변 불가 조건이 중요합니다.",
+    checklistTitle: "RAG 체크리스트",
+    checklist: ["검색할 문서 범위와 소유자가 정해졌는가?", "검색 쿼리 재작성 기준이 있는가?", "근거 선택과 제외 기준이 있는가?", "출처 표시 형식이 있는가?", "근거 없음/충돌 시 답변을 멈추는가?"],
+  },
+  6: {
+    templateTitle: "Multi-Agent 역할 카드",
+    template: `Agent 이름: [역할명]
+목적: [이 Agent가 필요한 이유]
+
+1. 책임
+- 해야 할 일:
+- 하지 말아야 할 일:
+
+2. 입력과 출력
+- 입력:
+- 출력:
+- 다음 Agent:
+
+3. 협업 방식
+- 순차 / 병렬 / 라우팅:
+- Coordinator:
+- 충돌 시 처리:
+
+4. 운영 기준
+- 비용/시간 제한:
+- 중단 조건:
+- 로그 항목:`,
+    comparisonTitle: "나쁜 Multi-Agent 설계와 개선 예시",
+    badLabel: "나쁜 설계",
+    bad: "검색 Agent, 분석 Agent, 검토 Agent가 모두 자료를 읽고 각자 보고서를 작성하게 한다.",
+    improvedLabel: "개선 설계",
+    improved: "검색 Agent는 근거 문서만 찾고, 요약 Agent는 근거를 요약하며, 검토 Agent는 위험과 누락만 확인한다. Coordinator가 결과를 취합하고 충돌 시 사람 승인으로 넘긴다.",
+    reason: "Module 6은 Agent 수를 늘리는 것이 아니라 역할 경계, 메시지 형식, 충돌 해결을 설계하는 모듈입니다.",
+    checklistTitle: "Multi-Agent 협업 체크리스트",
+    checklist: ["각 Agent의 책임과 금지 행동이 분리됐는가?", "Agent 간 메시지 형식이 정해졌는가?", "Coordinator의 역할이 명확한가?", "충돌 해결 기준이 있는가?", "비용과 무한 반복을 막는 중단 조건이 있는가?"],
+  },
+  7: {
+    templateTitle: "승인 요청 카드 템플릿",
+    template: `승인 요청명: [업무/결과]
+
+1. 원본 요청
+- 요청자:
+- 원본 내용:
+
+2. Agent 결과
+- 초안/결과:
+- 사용한 근거:
+- 확인 필요:
+
+3. 위험 검토
+- 정책 위험:
+- 개인정보:
+- 금전/법무 영향:
+
+4. 승인 요청
+- 승인자:
+- 승인 기준:
+- 승인 / 반려 / 수정 요청:
+
+5. 반려 시 흐름
+- 반려 사유:
+- 수정 담당:
+- 재승인 조건:`,
+    comparisonTitle: "나쁜 승인 흐름과 개선 예시",
+    badLabel: "나쁜 흐름",
+    bad: "Agent가 고객에게 보낼 답변을 만들면 상담원이 바쁘니 자동 발송한다.",
+    improvedLabel: "개선 흐름",
+    improved: "Agent는 답변 초안과 위험 검토 결과를 만들고, 보상/법무/개인정보가 있으면 팀장 승인으로 보낸다. 승인 요청에는 원본, 근거, 위험 항목, 추천 판단을 함께 포함한다.",
+    reason: "Module 7은 자동화 속도보다 책임 있는 승인과 반려 흐름이 핵심입니다.",
+    checklistTitle: "승인 체크리스트",
+    checklist: ["사람 승인이 필요한 고위험 조건이 정의됐는가?", "승인자와 대체 승인자가 정해졌는가?", "승인 요청에 원본과 근거가 포함되는가?", "반려 사유와 재작업 흐름이 있는가?", "승인/반려 로그가 남는가?"],
+  },
+  8: {
+    templateTitle: "Evaluation Sheet 템플릿",
+    template: `평가 대상: [Agent / Workflow / Chain]
+테스트 케이스: [정상 / 예외 / 위험]
+
+1. 입력
+- 샘플 입력:
+- 기대 결과:
+
+2. 평가 기준
+- 정확성:
+- 완전성:
+- 안전성:
+- 사용성:
+
+3. 점수
+- 기준별 점수:
+- 실패 사유:
+- 대표 오류:
+
+4. 개선
+- 원인 단계:
+- 수정할 프롬프트/도구/가드레일:
+- 재테스트 여부:`,
+    comparisonTitle: "나쁜 평가와 개선 예시",
+    badLabel: "나쁜 평가",
+    bad: "샘플 하나를 넣어봤는데 답변이 좋아 보이니 통과로 한다.",
+    improvedLabel: "개선 평가",
+    improved: "정상, 예외, 위험 케이스를 나누고 정확성, 완전성, 안전성, 사용성 기준으로 채점한다. 실패 사유를 기록해 개선할 단계와 재테스트 기준을 정한다.",
+    reason: "Module 8은 결과가 좋아 보이는지가 아니라 반복 측정 가능한 평가 기준과 데이터셋이 핵심입니다.",
+    checklistTitle: "Evaluation 체크리스트",
+    checklist: ["정상/예외/위험 테스트 케이스가 모두 있는가?", "정확성, 완전성, 안전성, 사용성 기준이 있는가?", "점수와 실패 사유를 함께 기록하는가?", "회귀 테스트 기준이 있는가?", "평가 결과가 개선 우선순위로 연결되는가?"],
+  },
+  9: {
+    templateTitle: "Guardrail Checklist 템플릿",
+    template: `Guardrail 대상: [입력 / 출력 / 도구 / 정책]
+
+1. 위험 조건
+- 금지 입력:
+- 금지 출력:
+- 승인 필요 행동:
+
+2. 처리 방식
+- 차단:
+- 마스킹:
+- 확인 필요:
+- 사람 승인:
+
+3. 도구 제한
+- 읽기 전용:
+- 금지 도구:
+- 승인 후 실행:
+
+4. 테스트
+- 정상 통과 케이스:
+- 위험 차단 케이스:
+- 경계 승인 케이스:
+
+5. 로그
+- 차단 사유:
+- 승인 기록:
+- 개선 여부:`,
+    comparisonTitle: "나쁜 Guardrail과 개선 예시",
+    badLabel: "나쁜 설계",
+    bad: "Agent가 위험한 요청인지 스스로 판단해서 적절히 처리하게 한다.",
+    improvedLabel: "개선 설계",
+    improved: "개인정보 포함 입력은 마스킹하거나 중단하고, 보상/법무/외부 발송 결과는 승인으로 보낸다. 도구는 읽기 전용, 승인 후 실행, 금지로 나누어 관리한다.",
+    reason: "Module 9는 Agent를 더 똑똑하게 만드는 것보다 어디서 멈추게 할지 정하는 모듈입니다.",
+    checklistTitle: "Guardrail 체크리스트",
+    checklist: ["입력/출력/도구 Guardrail이 분리됐는가?", "금지 행동과 승인 필요 행동이 명확한가?", "위험도 등급별 처리 기준이 있는가?", "정상 통과와 위험 차단 테스트가 있는가?", "차단과 승인 로그가 남는가?"],
+  },
+  10: {
+    templateTitle: "운영 거버넌스 템플릿",
+    template: `Agent Workflow 이름: [운영 대상]
+
+1. 역할
+- Owner:
+- Operator:
+- Reviewer:
+- Approver:
+
+2. 사용 정책
+- 허용 업무:
+- 금지 업무:
+- 민감정보 처리:
+
+3. 변경 관리
+- 변경 요청:
+- 테스트:
+- 승인:
+- 배포:
+- 롤백:
+
+4. 운영 지표
+- 성공률:
+- 실패율:
+- 승인 대기:
+- 안전 이벤트:
+
+5. 지원
+- 이슈 접수:
+- 개선 주기:
+- 교육/FAQ:`,
+    comparisonTitle: "나쁜 운영과 개선 예시",
+    badLabel: "나쁜 운영",
+    bad: "완성된 Agent 링크를 팀에 공유하고 각자 알아서 쓰게 한다.",
+    improvedLabel: "개선 운영",
+    improved: "Owner, Operator, Reviewer, Approver를 정하고 사용 정책, 변경 관리, 운영 지표, 이슈 처리, 교육 자료를 함께 운영한다.",
+    reason: "Module 10은 기능 구현이 아니라 팀에서 지속적으로 안전하게 쓰기 위한 운영 체계를 만드는 모듈입니다.",
+    checklistTitle: "Governance 체크리스트",
+    checklist: ["Owner와 승인자가 정해졌는가?", "허용 업무와 금지 업무가 문서화됐는가?", "프롬프트/도구/데이터 변경 절차가 있는가?", "운영 지표와 안전 이벤트를 추적하는가?", "사용자 교육과 이슈 처리 경로가 있는가?"],
+  },
+  11: {
+    templateTitle: "Capstone 제출 패키지 템플릿",
+    template: `프로젝트명: [Capstone Agent Workflow]
+
+1. 문제 정의
+- 현재 업무:
+- 문제와 병목:
+- 성공 기준:
+
+2. 설계
+- Workflow Map:
+- Prompt Chain:
+- Tool/RAG:
+- Context/Memory:
+
+3. 안전과 승인
+- Guardrail:
+- 승인 기준:
+- 중단 조건:
+
+4. 테스트
+- 정상 케이스:
+- 예외 케이스:
+- 위험 케이스:
+- 평가 결과:
+
+5. 운영
+- Owner:
+- 로그:
+- 변경 관리:
+- 30일 파일럿 계획:`,
+    comparisonTitle: "나쁜 Capstone과 개선 예시",
+    badLabel: "나쁜 제출",
+    bad: "Agent 데모 영상과 잘 나온 결과 하나를 제출한다.",
+    improvedLabel: "개선 제출",
+    improved: "문제 정의, 워크플로우 맵, 프롬프트 체인, 도구/RAG 설계, 평가 결과, 가드레일, 승인 흐름, 운영 계획을 하나의 프로젝트 패키지로 제출한다.",
+    reason: "Module 11은 데모가 아니라 실제 파일럿으로 넘길 수 있는 검증된 패키지를 완성하는 단계입니다.",
+    checklistTitle: "Capstone 최종 제출 체크리스트",
+    checklist: ["문제와 성공 기준이 측정 가능한가?", "Workflow, Prompt Chain, Tool/RAG 설계가 연결됐는가?", "정상/예외/위험 테스트 결과가 있는가?", "Guardrail과 승인 흐름이 포함됐는가?", "Owner, 로그, 변경 관리, 파일럿 계획이 있는가?"],
+  },
+}
+
 export const agentWorkflowCourse = {
   id: "agent-workflow",
   track: "advanced",
@@ -1559,9 +1996,14 @@ export const agentWorkflowModuleLevels = agentWorkflowLessons.map((lesson, index
   lessons: getDetailedModuleLessons(index) ?? [lesson],
   examples: index === 0 ? ["Naver Blog", "Gmail", "Notion", "Chrome DevTools Network"] : lesson.examples.map((example) => example.title),
   practice: index === 0 ? "서비스 분류표와 웹 요청 분석 리포트를 작성합니다." : lesson.activity.title,
-  goodPrompt: agentWorkflowCourse.goodPrompt,
-  promptComparison: agentWorkflowCourse.promptComparison,
-  checklist: lesson.sections.find((section) => section.heading === "12. 실무 체크리스트")?.points ?? agentWorkflowCourse.checklist,
+  supportMaterials: moduleSupportMaterialsByIndex[index],
+  goodPrompt: moduleSupportMaterialsByIndex[index]?.template ?? agentWorkflowCourse.goodPrompt,
+  promptComparison: {
+    bad: moduleSupportMaterialsByIndex[index]?.bad ?? agentWorkflowCourse.promptComparison.bad,
+    improved: moduleSupportMaterialsByIndex[index]?.improved ?? agentWorkflowCourse.promptComparison.improved,
+    reason: moduleSupportMaterialsByIndex[index]?.reason ?? agentWorkflowCourse.promptComparison.reason,
+  },
+  checklist: moduleSupportMaterialsByIndex[index]?.checklist ?? lesson.sections.find((section) => section.heading === "12. 실무 체크리스트")?.points ?? agentWorkflowCourse.checklist,
   questions: lesson.quiz.map((item) => item.q),
   nextSteps: agentWorkflowCourse.nextSteps,
   materials: agentWorkflowCourse.materials,

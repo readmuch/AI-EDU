@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Accordion from "../components/mobile/Accordion"
 import SectionHeader from "../components/mobile/SectionHeader"
 import { advancedLearningLevels, learningLevels } from "../data/mobileCourseData"
@@ -33,16 +33,23 @@ function CourseView({ selectedLevelId }) {
   const [activeId, setActiveId] = useState(selectedLevelId === "agent-workflow" ? advancedLearningLevels[0].id : selectedLevelId ?? fallbackLevelId)
   const activeLevel = activeLevels.find((level) => level.id === activeId) ?? activeLevels[0]
   const activeTrack = trackOptions.find((track) => track.id === activeTrackId) ?? trackOptions[0]
+  const activeLevelIndex = Math.max(
+    activeLevels.findIndex((level) => level.id === activeLevel.id),
+    0,
+  )
   const getLessonId = (index) => `${activeLevel.id}-lesson-${index + 1}`
-
-  useEffect(() => {
-    const nextTrackId = getTrackIdByLevelId(selectedLevelId)
-    const nextLevels = nextTrackId === "advanced" ? advancedLearningLevels : learningLevels
-    const nextLevelId = selectedLevelId === "agent-workflow" ? nextLevels[0].id : selectedLevelId ?? nextLevels[0].id
-
-    setActiveTrackId(nextTrackId)
-    setActiveId(nextLevels.some((level) => level.id === nextLevelId) ? nextLevelId : nextLevels[0].id)
-  }, [selectedLevelId])
+  const supportMaterials = activeLevel.supportMaterials ?? {
+    templateTitle: "좋은 프롬프트 예시",
+    template: activeLevel.goodPrompt,
+    comparisonTitle: "나쁜 프롬프트와 개선 예시",
+    badLabel: "나쁜 예시",
+    bad: activeLevel.promptComparison.bad,
+    improvedLabel: "개선 예시",
+    improved: activeLevel.promptComparison.improved,
+    reason: activeLevel.promptComparison.reason,
+    checklistTitle: "체크리스트",
+    checklist: activeLevel.checklist,
+  }
 
   const handleLessonJump = (index) => {
     const lessonElement = document.getElementById(getLessonId(index))
@@ -57,6 +64,15 @@ function CourseView({ selectedLevelId }) {
     const nextLevels = trackId === "advanced" ? advancedLearningLevels : learningLevels
     setActiveTrackId(trackId)
     setActiveId(nextLevels[0].id)
+  }
+
+  const handleLevelMove = (direction) => {
+    const nextIndex = activeLevelIndex + direction
+    const nextLevel = activeLevels[nextIndex]
+
+    if (nextLevel) {
+      setActiveId(nextLevel.id)
+    }
   }
 
   return (
@@ -88,25 +104,66 @@ function CourseView({ selectedLevelId }) {
       </div>
 
       <div className="rounded-lg border border-slate-200 bg-white p-3">
-        <p className="px-1 pb-3 text-sm font-black text-indigo-700">{activeTrack.eyebrow}</p>
-      <div className="flex gap-2 overflow-x-auto pb-1">
-        {activeLevels.map((level) => {
-          const isActive = level.id === activeId
-          return (
-            <button
-              key={level.id}
-              type="button"
-              onClick={() => setActiveId(level.id)}
-              className={`min-h-12 min-w-36 rounded-lg px-4 py-3 text-left transition ${
-                isActive ? "bg-slate-950 text-white" : "border border-slate-200 bg-white text-slate-700"
-              }`}
+        <div className="flex items-center justify-between gap-3 px-1 pb-3">
+          <p className="text-sm font-black text-indigo-700">{activeTrack.eyebrow}</p>
+          <p className="text-xs font-bold text-slate-500">
+            {activeLevelIndex + 1} / {activeLevels.length}
+          </p>
+        </div>
+
+        <div className="space-y-3 sm:hidden">
+          <label className="block">
+            <span className="sr-only">모듈 선택</span>
+            <select
+              value={activeId}
+              onChange={(event) => setActiveId(event.target.value)}
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-3 text-base font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
-              <span className="block text-xs font-black opacity-80">{level.step}</span>
-              <span className="block text-base font-black">{level.title}</span>
+              {activeLevels.map((level) => (
+                <option key={level.id} value={level.id}>
+                  {level.step}. {level.title}
+                </option>
+              ))}
+            </select>
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => handleLevelMove(-1)}
+              disabled={activeLevelIndex === 0}
+              className="rounded-lg border border-slate-200 px-3 py-2 text-sm font-black text-slate-700 transition enabled:hover:border-indigo-300 enabled:hover:text-indigo-700 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              이전 모듈
             </button>
-          )
-        })}
-      </div>
+            <button
+              type="button"
+              onClick={() => handleLevelMove(1)}
+              disabled={activeLevelIndex === activeLevels.length - 1}
+              className="rounded-lg border border-slate-200 px-3 py-2 text-sm font-black text-slate-700 transition enabled:hover:border-indigo-300 enabled:hover:text-indigo-700 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              다음 모듈
+            </button>
+          </div>
+        </div>
+
+        <div className="hidden gap-2 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+          {activeLevels.map((level) => {
+            const isActive = level.id === activeId
+            return (
+              <button
+                key={level.id}
+                type="button"
+                onClick={() => setActiveId(level.id)}
+                className={`min-h-24 rounded-lg px-4 py-3 text-left transition focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
+                  isActive ? "bg-slate-950 text-white" : "border border-slate-200 bg-white text-slate-700 hover:border-indigo-300"
+                }`}
+              >
+                <span className="block text-xs font-black opacity-80">{level.step}</span>
+                <span className="mt-1 block text-base font-black leading-6">{level.title}</span>
+              </button>
+            )
+          })}
+        </div>
       </div>
 
       <article className="rounded-lg border border-slate-200 bg-white p-4 md:p-5">
@@ -282,29 +339,29 @@ function CourseView({ selectedLevelId }) {
           </div>
         </Accordion>
 
-        <Accordion title="좋은 프롬프트 예시">
+        <Accordion title={supportMaterials.templateTitle}>
           <pre className="whitespace-pre-wrap break-words rounded-lg bg-slate-950 p-4 text-sm leading-6 text-white">
-            {activeLevel.goodPrompt}
+            {supportMaterials.template}
           </pre>
         </Accordion>
 
-        <Accordion title="나쁜 프롬프트와 개선 예시">
+        <Accordion title={supportMaterials.comparisonTitle}>
           <div className="space-y-3">
             <div className="rounded-lg bg-rose-50 p-3">
-              <p className="text-sm font-black text-rose-800">나쁜 예시</p>
-              <p className="mt-1 text-base leading-7 text-rose-950">{activeLevel.promptComparison.bad}</p>
+              <p className="text-sm font-black text-rose-800">{supportMaterials.badLabel}</p>
+              <p className="mt-1 text-base leading-7 text-rose-950">{supportMaterials.bad}</p>
             </div>
             <div className="rounded-lg bg-teal-50 p-3">
-              <p className="text-sm font-black text-teal-800">개선 예시</p>
-              <p className="mt-1 text-base leading-7 text-teal-950">{activeLevel.promptComparison.improved}</p>
+              <p className="text-sm font-black text-teal-800">{supportMaterials.improvedLabel}</p>
+              <p className="mt-1 text-base leading-7 text-teal-950">{supportMaterials.improved}</p>
             </div>
-            <p className="text-base leading-7 text-slate-700">{activeLevel.promptComparison.reason}</p>
+            <p className="text-base leading-7 text-slate-700">{supportMaterials.reason}</p>
           </div>
         </Accordion>
 
-        <Accordion title="체크리스트">
+        <Accordion title={supportMaterials.checklistTitle}>
           <ul className="space-y-2">
-            {activeLevel.checklist.map((item) => (
+            {supportMaterials.checklist.map((item) => (
               <li key={item} className="text-base leading-7 text-slate-700">
                 {item}
               </li>

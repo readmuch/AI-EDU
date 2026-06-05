@@ -32,7 +32,7 @@ function App() {
   const renderActiveView = () => {
     switch (activeTab) {
       case "course":
-        return <CourseView selectedLevelId={selectedCourseId} />
+        return <CourseView key={selectedCourseId ?? "default-course"} selectedLevelId={selectedCourseId} />
       case "practice":
         return <PracticeView />
       case "templates":
