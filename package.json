@@ -6,11 +6,15 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "check:insights": "node scripts/check-insight-markdown.mjs && node scripts/check-insight-pages.mjs",
     "check:text": "node scripts/check-korean-text.mjs",
     "check:ux": "node scripts/check-mobile-ux.mjs",
     "deploy": "npm run build && firebase deploy",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check:navigation": "node scripts/check-navigation-state.mjs",
+    "check:insight-pages": "node scripts/check-insight-pages.mjs",
+    "check:home": "node scripts/check-home-content.mjs"
   },
   "dependencies": {
     "react": "^19.2.6",

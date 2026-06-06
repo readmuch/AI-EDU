@@ -2,10 +2,12 @@ import { Suspense, lazy, useEffect, useMemo, useRef, useState } from "react"
 import BottomNavigation from "./components/mobile/BottomNavigation"
 import DesktopNavigation from "./components/mobile/DesktopNavigation"
 import { navigationTabs } from "./data/navigationData"
+import { buildNavigationHash, readNavigationState } from "./data/navigationState"
 
 const CourseView = lazy(() => import("./views/CourseView"))
 const FaqView = lazy(() => import("./views/FaqView"))
 const HomeView = lazy(() => import("./views/HomeView"))
+const InsightView = lazy(() => import("./views/InsightView"))
 const PracticeView = lazy(() => import("./views/PracticeView"))
 const TemplateView = lazy(() => import("./views/TemplateView"))
 
@@ -18,8 +20,10 @@ function ViewLoading() {
 }
 
 function App() {
-  const [activeTab, setActiveTab] = useState("home")
-  const [selectedCourseId, setSelectedCourseId] = useState(null)
+  const initialNavigationState = useMemo(() => readNavigationState(), [])
+  const [activeTab, setActiveTab] = useState(initialNavigationState.activeTab)
+  const [selectedCourseId, setSelectedCourseId] = useState(initialNavigationState.selectedCourseId)
+  const [selectedInsightId, setSelectedInsightId] = useState(initialNavigationState.selectedInsightId)
   const mainRef = useRef(null)
 
   const activeLabel = useMemo(() => {
@@ -35,6 +39,10 @@ function App() {
     if (tabId === "course" && options.courseId) {
       setSelectedCourseId(options.courseId)
     }
+    if (tabId === "insights" && options.insightId) {
+      setSelectedInsightId(options.insightId)
+    }
+    window.history.replaceState(null, "", buildNavigationHash(tabId, options))
     setActiveTab(tabId)
   }
 
@@ -46,6 +54,8 @@ function App() {
         return <PracticeView />
       case "templates":
         return <TemplateView />
+      case "insights":
+        return <InsightView key={selectedInsightId ?? "default-insight"} selectedInsightId={selectedInsightId} />
       case "faq":
         return <FaqView />
       case "home":
