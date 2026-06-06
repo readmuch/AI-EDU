@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Home Hero Left Space Options</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #f8fafc;
+        color: #020617;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+      }
+
+      main {
+        width: min(1320px, calc(100vw - 40px));
+        margin: 32px auto 56px;
+      }
+
+      .intro {
+        margin-bottom: 20px;
+      }
+
+      .intro h1 {
+        margin: 0;
+        font-size: 28px;
+        line-height: 1.2;
+      }
+
+      .intro p {
+        margin: 8px 0 0;
+        color: #475569;
+        font-size: 15px;
+        font-weight: 700;
+      }
+
+      .option {
+        margin-top: 24px;
+      }
+
+      .option-label {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 10px;
+      }
+
+      .option-label h2 {
+        margin: 0;
+        font-size: 18px;
+      }
+
+      .option-label p {
+        margin: 0;
+        color: #64748b;
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .hero {
+        overflow: hidden;
+        border: 1px solid #dbe3ed;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 1px 4px rgb(15 23 42 / 0.08);
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+      }
+
+      .left {
+        min-height: 610px;
+        padding: 48px 48px 42px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .eyebrow {
+        margin: 0;
+        color: #0f766e;
+        font-size: 15px;
+        font-weight: 950;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .headline {
+        margin: 28px 0 0;
+        max-width: 680px;
+        font-size: clamp(44px, 5vw, 70px);
+        line-height: 1.12;
+        font-weight: 950;
+        letter-spacing: 0;
+      }
+
+      .copy {
+        margin: 28px 0 0;
+        max-width: 610px;
+        color: #475569;
+        font-size: 19px;
+        line-height: 1.72;
+        font-weight: 650;
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin-top: 34px;
+        max-width: 610px;
+      }
+
+      .btn {
+        min-height: 56px;
+        border: 0;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: 950;
+      }
+
+      .btn.dark {
+        background: #020617;
+        color: #fff;
+      }
+
+      .btn.soft {
+        background: #ecfdf5;
+        color: #064e3b;
+        box-shadow: inset 0 0 0 1px #7dd3c7;
+      }
+
+      .right {
+        padding: 30px 28px;
+        background: #020617;
+        color: #fff;
+      }
+
+      .right-title {
+        margin: 0;
+        color: #2dd4bf;
+        font-size: 18px;
+        font-weight: 950;
+      }
+
+      .featured {
+        display: grid;
+        gap: 16px;
+        margin-top: 20px;
+      }
+
+      .feature-card {
+        border-radius: 8px;
+        background: #fff;
+        color: #020617;
+        padding: 22px;
+      }
+
+      .tag-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .tag {
+        border-radius: 6px;
+        background: #eef2ff;
+        color: #4338ca;
+        padding: 6px 10px;
+        font-size: 13px;
+        font-weight: 950;
+      }
+
+      .tag.teal {
+        background: #ecfdf5;
+        color: #115e59;
+      }
+
+      .tag.amber {
+        background: #fffbeb;
+        color: #92400e;
+      }
+
+      .meta {
+        color: #64748b;
+        font-size: 13px;
+        font-weight: 950;
+      }
+
+      .feature-card h3 {
+        margin: 18px 0 0;
+        font-size: 24px;
+        line-height: 1.25;
+      }
+
+      .feature-card p {
+        margin: 14px 0 0;
+        color: #475569;
+        font-size: 15px;
+        line-height: 1.65;
+        font-weight: 750;
+      }
+
+      .mini-cta {
+        display: inline-flex;
+        align-items: center;
+        min-height: 38px;
+        margin-top: 16px;
+        border-radius: 8px;
+        background: #020617;
+        color: #fff;
+        padding: 8px 13px;
+        font-size: 14px;
+        font-weight: 950;
+      }
+
+      .journey {
+        margin-top: auto;
+        max-width: 610px;
+        border: 1px solid #dbe3ed;
+        border-radius: 8px;
+        background: #f8fafc;
+        padding: 18px;
+      }
+
+      .journey-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+
+      .journey-head strong {
+        font-size: 16px;
+      }
+
+      .journey-head span {
+        color: #0f766e;
+        font-size: 12px;
+        font-weight: 950;
+      }
+
+      .step {
+        display: grid;
+        grid-template-columns: 34px 1fr auto;
+        gap: 12px;
+        align-items: center;
+        min-height: 52px;
+        border-top: 1px solid #e2e8f0;
+      }
+
+      .step:first-of-type {
+        border-top: 0;
+      }
+
+      .num {
+        display: grid;
+        width: 26px;
+        height: 26px;
+        place-items: center;
+        border-radius: 999px;
+        background: #020617;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 950;
+      }
+
+      .step b {
+        display: block;
+        font-size: 14px;
+      }
+
+      .step small {
+        display: block;
+        margin-top: 2px;
+        color: #64748b;
+        font-weight: 800;
+      }
+
+      .arrow {
+        color: #0f766e;
+        font-weight: 950;
+      }
+
+      .stat-strip {
+        margin-top: auto;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        max-width: 640px;
+      }
+
+      .stat-card {
+        min-height: 120px;
+        border: 1px solid #dbe3ed;
+        border-radius: 8px;
+        background: #fff;
+        padding: 16px;
+      }
+
+      .stat-card span {
+        color: #64748b;
+        font-size: 12px;
+        font-weight: 950;
+        text-transform: uppercase;
+      }
+
+      .stat-card strong {
+        display: block;
+        margin-top: 14px;
+        font-size: 25px;
+        line-height: 1.1;
+      }
+
+      .stat-card p {
+        margin: 10px 0 0;
+        color: #475569;
+        font-size: 13px;
+        font-weight: 750;
+        line-height: 1.45;
+      }
+
+      .compact-left {
+        min-height: 0;
+      }
+
+      .compact-card {
+        margin-top: 30px;
+        max-width: 610px;
+        border-radius: 8px;
+        background: #f1f5f9;
+        padding: 18px;
+      }
+
+      .compact-card h3 {
+        margin: 0;
+        font-size: 18px;
+      }
+
+      .compact-card p {
+        margin: 8px 0 0;
+        color: #475569;
+        font-size: 14px;
+        font-weight: 750;
+        line-height: 1.6;
+      }
+
+      @media (max-width: 900px) {
+        .hero-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .left {
+          min-height: 0;
+        }
+
+        .actions,
+        .stat-strip {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="intro">
+        <h1>좌측 하단 빈 공간 개선 시안</h1>
+        <p>실제 홈 히어로 톤을 기준으로 만든 비교 목업입니다. A안을 추천합니다.</p>
+      </section>
+
+      <section class="option">
+        <div class="option-label">
+          <h2>A안: 오늘의 추천 루트</h2>
+          <p>추천: 빈 공간을 다음 행동 안내로 전환</p>
+        </div>
+        <div class="hero">
+          <div class="hero-grid">
+            <div class="left">
+              <p class="eyebrow">AI Media & Academy Hub</p>
+              <h2 class="headline">AI 실무자를 위한 지식 미디어와 학습 허브</h2>
+              <p class="copy">생성형 AI의 기본기, Agent Workflow, 비즈니스 인사이트, 실습 자료를 한 화면에서 연결해 업무 적용까지 이어갑니다.</p>
+              <div class="actions">
+                <button class="btn dark">교육 과정 살펴보기</button>
+                <button class="btn soft">최신 인사이트 읽기</button>
+              </div>
+
+              <div class="journey">
+                <div class="journey-head">
+                  <strong>오늘의 추천 루트</strong>
+                  <span>LEARN -> THINK -> APPLY</span>
+                </div>
+                <div class="step">
+                  <span class="num">1</span>
+                  <div><b>기본기 잡기</b><small>AI 입문 과정으로 핵심 개념 정리</small></div>
+                  <span class="arrow">과정</span>
+                </div>
+                <div class="step">
+                  <span class="num">2</span>
+                  <div><b>업무 관점 넓히기</b><small>사례와 전략 인사이트로 적용 방향 확인</small></div>
+                  <span class="arrow">인사이트</span>
+                </div>
+                <div class="step">
+                  <span class="num">3</span>
+                  <div><b>바로 적용하기</b><small>템플릿과 실습 자료로 반복 가능한 흐름 만들기</small></div>
+                  <span class="arrow">실습</span>
+                </div>
+              </div>
+            </div>
+
+            <aside class="right">
+              <p class="right-title">Featured Now</p>
+              <div class="featured">
+                <article class="feature-card">
+                  <div class="tag-row"><span class="tag">Insight</span><span class="meta">4 min</span></div>
+                  <h3>Codex로 자기개선형 세무 에이전트 만들기</h3>
+                  <p>OpenAI와 Thrive Holdings가 Codex, 전문가 피드백, 제품 trace, eval을 연결한 사례입니다.</p>
+                  <span class="mini-cta">대표 인사이트 읽기</span>
+                </article>
+                <article class="feature-card">
+                  <div class="tag-row"><span class="tag teal">Academy</span><span class="meta">심화 과정</span></div>
+                  <h3>Agent with Workflow</h3>
+                  <p>Agent, 도구, 데이터, 검증, 승인 흐름을 연결해 업무용 워크플로우를 설계합니다.</p>
+                  <span class="mini-cta">심화 과정 보기</span>
+                </article>
+                <article class="feature-card">
+                  <div class="tag-row"><span class="tag amber">Practice</span><span class="meta">Templates</span></div>
+                  <h3>프롬프트와 실습 자료</h3>
+                  <p>업무 상황별 예시와 템플릿을 골라 바로 테스트하고 작업 흐름으로 정리합니다.</p>
+                  <span class="mini-cta">실습 자료 보기</span>
+                </article>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="option">
+        <div class="option-label">
+          <h2>B안: 핵심 지표 카드</h2>
+          <p>정보 밀도는 높지만 아래 요약 카드와 중복 가능</p>
+        </div>
+        <div class="hero">
+          <div class="hero-grid">
+            <div class="left">
+              <p class="eyebrow">AI Media & Academy Hub</p>
+              <h2 class="headline">AI 실무자를 위한 지식 미디어와 학습 허브</h2>
+              <p class="copy">생성형 AI의 기본기, Agent Workflow, 비즈니스 인사이트, 실습 자료를 한 화면에서 연결해 업무 적용까지 이어갑니다.</p>
+              <div class="actions">
+                <button class="btn dark">교육 과정 살펴보기</button>
+                <button class="btn soft">최신 인사이트 읽기</button>
+              </div>
+
+              <div class="stat-strip">
+                <div class="stat-card"><span>Academy</span><strong>2 Tracks</strong><p>입문부터 Agent Workflow까지</p></div>
+                <div class="stat-card"><span>Insights</span><strong>2 Articles</strong><p>비즈니스와 업무 적용 관점</p></div>
+                <div class="stat-card"><span>Practice</span><strong>Ready</strong><p>프롬프트와 실습 자료 연결</p></div>
+              </div>
+            </div>
+            <aside class="right">
+              <p class="right-title">Featured Now</p>
+              <div class="featured">
+                <article class="feature-card"><div class="tag-row"><span class="tag">Insight</span><span class="meta">4 min</span></div><h3>Codex로 자기개선형 세무 에이전트 만들기</h3><p>OpenAI와 Thrive Holdings가 Codex와 eval을 연결한 사례입니다.</p><span class="mini-cta">대표 인사이트 읽기</span></article>
+                <article class="feature-card"><div class="tag-row"><span class="tag teal">Academy</span><span class="meta">심화 과정</span></div><h3>Agent with Workflow</h3><p>업무용 워크플로우를 설계합니다.</p><span class="mini-cta">심화 과정 보기</span></article>
+                <article class="feature-card"><div class="tag-row"><span class="tag amber">Practice</span><span class="meta">Templates</span></div><h3>프롬프트와 실습 자료</h3><p>업무 상황별 템플릿을 바로 테스트합니다.</p><span class="mini-cta">실습 자료 보기</span></article>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="option">
+        <div class="option-label">
+          <h2>C안: 간결한 안내 박스</h2>
+          <p>가장 얌전하지만 행동 유도는 A안보다 약함</p>
+        </div>
+        <div class="hero">
+          <div class="hero-grid">
+            <div class="left compact-left">
+              <p class="eyebrow">AI Media & Academy Hub</p>
+              <h2 class="headline">AI 실무자를 위한 지식 미디어와 학습 허브</h2>
+              <p class="copy">생성형 AI의 기본기, Agent Workflow, 비즈니스 인사이트, 실습 자료를 한 화면에서 연결해 업무 적용까지 이어갑니다.</p>
+              <div class="actions">
+                <button class="btn dark">교육 과정 살펴보기</button>
+                <button class="btn soft">최신 인사이트 읽기</button>
+              </div>
+              <div class="compact-card">
+                <h3>학습과 적용을 한 흐름으로</h3>
+                <p>과정에서 개념을 익히고, 인사이트에서 판단 기준을 얻은 뒤, 템플릿으로 실제 업무에 바로 적용합니다.</p>
+              </div>
+            </div>
+            <aside class="right">
+              <p class="right-title">Featured Now</p>
+              <div class="featured">
+                <article class="feature-card"><div class="tag-row"><span class="tag">Insight</span><span class="meta">4 min</span></div><h3>Codex로 자기개선형 세무 에이전트 만들기</h3><p>OpenAI와 Thrive Holdings가 Codex와 eval을 연결한 사례입니다.</p><span class="mini-cta">대표 인사이트 읽기</span></article>
+                <article class="feature-card"><div class="tag-row"><span class="tag teal">Academy</span><span class="meta">심화 과정</span></div><h3>Agent with Workflow</h3><p>업무용 워크플로우를 설계합니다.</p><span class="mini-cta">심화 과정 보기</span></article>
+                <article class="feature-card"><div class="tag-row"><span class="tag amber">Practice</span><span class="meta">Templates</span></div><h3>프롬프트와 실습 자료</h3><p>업무 상황별 템플릿을 바로 테스트합니다.</p><span class="mini-cta">실습 자료 보기</span></article>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
