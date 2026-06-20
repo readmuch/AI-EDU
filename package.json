@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "test": "node scripts/check-navigation-state.mjs && node scripts/check-app-routing.mjs && node scripts/check-insight-markdown.mjs && node scripts/check-insight-pages.mjs && node scripts/check-home-content.mjs && node scripts/check-mobile-ux.mjs && node scripts/check-course-prompt-examples.mjs && node scripts/check-korean-text.mjs",
     "check:insights": "node scripts/check-insight-markdown.mjs && node scripts/check-insight-pages.mjs",
     "check:text": "node scripts/check-korean-text.mjs",
     "check:ux": "node scripts/check-mobile-ux.mjs",

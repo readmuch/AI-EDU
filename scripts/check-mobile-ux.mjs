@@ -19,9 +19,9 @@ const requiredFiles = [
 
 const checks = [
   {
-    label: "mobile shell uses five navigation tabs",
-    file: "src/data/mobileCourseData.js",
-    pattern: /id:\s*"home"[\s\S]*id:\s*"course"[\s\S]*id:\s*"practice"[\s\S]*id:\s*"templates"[\s\S]*id:\s*"faq"/,
+    label: "mobile shell uses the current navigation tabs",
+    file: "src/data/navigationData.js",
+    pattern: /id:\s*"home"[\s\S]*id:\s*"course"[\s\S]*id:\s*"practice"[\s\S]*id:\s*"templates"[\s\S]*id:\s*"insights"[\s\S]*id:\s*"faq"/,
   },
   {
     label: "mobile bottom navigation exposes aria-current",
@@ -39,14 +39,14 @@ const checks = [
     pattern: /copied \? "복사 완료" : label/,
   },
   {
-    label: "home has large shortcuts to practice and templates",
+    label: "home has a large shortcut to reusable prompt materials",
     file: "src/views/HomeView.jsx",
-    pattern: /onNavigate\("practice"\)[\s\S]*onNavigate\("templates"\)/,
+    pattern: /프롬프트와 실습 자료[\s\S]*onNavigate\("templates"/,
   },
   {
     label: "course uses accordions for long mobile content",
     file: "src/views/CourseView.jsx",
-    pattern: /<Accordion[\s\S]*일자별 시간표[\s\S]*<Accordion[\s\S]*실습 자료/,
+    pattern: /<Accordion[\s\S]*교시별 시간표[\s\S]*<Accordion[\s\S]*교시별 상세 강의자료/,
   },
   {
     label: "app switches active views instead of rendering one long page",

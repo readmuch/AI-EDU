@@ -41,6 +41,18 @@ function inlineMarkdown(value) {
   return escapeHtml(value).replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>')
 }
 
+export function normalizeSourceUrl(value) {
+  const trimmed = value.trim()
+  if (!trimmed) return ""
+
+  try {
+    const url = new URL(trimmed)
+    return url.protocol === "https:" || url.protocol === "http:" ? trimmed : ""
+  } catch {
+    return ""
+  }
+}
+
 export function markdownToHtml(markdown) {
   const lines = markdown.trim().split(/\r?\n/)
   const html = []
@@ -96,7 +108,7 @@ export function parseInsightMarkdown(markdown, filePath) {
     date: metadata.date || "",
     summary: metadata.summary || "",
     sourceTitle: metadata.sourceTitle || "",
-    sourceUrl: metadata.sourceUrl || "",
+    sourceUrl: normalizeSourceUrl(metadata.sourceUrl || ""),
     body: body.trim(),
     html: markdownToHtml(body),
     readTime: metadata.readTime || "3 min",

@@ -70,6 +70,12 @@ npm run build
 npm run lint
 ```
 
+통합 검증:
+
+```bash
+npm test
+```
+
 한글 텍스트 깨짐 검사:
 
 ```bash
@@ -160,7 +166,7 @@ content/
 - 공개 교육자료로 재사용하기 쉬운 표현을 사용합니다.
 - 개인정보, 회사 기밀, 유료 서비스 의존 예시는 넣지 않습니다.
 - Firebase Spark 요금제에서 비용이 발생할 수 있는 기능을 추가하지 않습니다.
-- 변경 후 `npm run lint`와 `npm run build`를 실행합니다.
+- 변경 후 `npm run lint`, `npm test`, `npm run build`를 실행합니다.
 
 권장 기여 유형:
 

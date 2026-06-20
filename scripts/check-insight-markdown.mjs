@@ -3,6 +3,7 @@ import {
   buildInsightCategories,
   filterInsightPosts,
   normalizeInsightCategory,
+  normalizeSourceUrl,
   parseInsightMarkdown,
   sortInsightPosts,
 } from "../src/data/insightMarkdown.js"
@@ -43,3 +44,8 @@ assert.equal(normalizeInsightCategory("Games", ["All Posts", "Games", "AI"]), "G
 assert.deepEqual(sortInsightPosts(posts).map((post) => post.id), ["workflow", "chess", "undated"])
 assert.deepEqual(filterInsightPosts(posts, "Games", "").map((post) => post.id), ["chess", "undated"])
 assert.deepEqual(filterInsightPosts(posts, "All Posts", "guide").map((post) => post.id), ["workflow"])
+
+assert.equal(normalizeSourceUrl("https://example.com/a"), "https://example.com/a")
+assert.equal(normalizeSourceUrl("http://example.com/a"), "http://example.com/a")
+assert.equal(normalizeSourceUrl("javascript:alert(1)"), "")
+assert.equal(normalizeSourceUrl("data:text/html,<script>alert(1)</script>"), "")

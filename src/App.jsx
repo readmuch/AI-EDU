@@ -35,6 +35,18 @@ function App() {
     window.scrollTo({ top: 0, behavior: "smooth" })
   }, [activeTab])
 
+  useEffect(() => {
+    const handlePopState = () => {
+      const nextNavigationState = readNavigationState()
+      setActiveTab(nextNavigationState.activeTab)
+      setSelectedCourseId(nextNavigationState.selectedCourseId)
+      setSelectedInsightId(nextNavigationState.selectedInsightId)
+    }
+
+    window.addEventListener("popstate", handlePopState)
+    return () => window.removeEventListener("popstate", handlePopState)
+  }, [])
+
   const handleNavigate = (tabId, options = {}) => {
     if (tabId === "course" && options.courseId) {
       setSelectedCourseId(options.courseId)
@@ -42,7 +54,7 @@ function App() {
     if (tabId === "insights" && options.insightId) {
       setSelectedInsightId(options.insightId)
     }
-    window.history.replaceState(null, "", buildNavigationHash(tabId, options))
+    window.history.pushState(null, "", buildNavigationHash(tabId, options))
     setActiveTab(tabId)
   }
 

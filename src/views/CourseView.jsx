@@ -1,5 +1,6 @@
 import { useState } from "react"
 import Accordion from "../components/mobile/Accordion"
+import CopyButton from "../components/mobile/CopyButton"
 import SectionHeader from "../components/mobile/SectionHeader"
 import { advancedLearningLevels, learningLevels } from "../data/mobileCourseData"
 
@@ -25,6 +26,75 @@ const getTrackIdByLevelId = (levelId) => {
 
   return "foundation"
 }
+
+const createLessonPromptExamples = (lessonItem) => [
+  {
+    title: "수업 내용을 내 업무에 적용하기",
+    desc: "강의 내용을 실제 업무 상황으로 바꿔서 첫 결과물을 만들 때 사용합니다.",
+    prompt: `너는 실무 AI 활용 코치야.
+아래 강의 주제를 내 업무에 바로 적용할 수 있는 실행안으로 바꿔줘.
+
+강의 주제: ${lessonItem.topic}
+내 업무 상황: [내 업무 상황을 붙여넣기]
+목표: ${lessonItem.goals[0]}
+
+출력 형식:
+1. 이 주제가 내 업무에 중요한 이유
+2. 바로 시도할 수 있는 업무 시나리오 3개
+3. 각 시나리오에 쓸 첫 프롬프트
+4. 결과물을 검토할 체크리스트
+
+조건:
+- 추상적인 설명보다 실제 행동 중심으로 작성
+- 내가 바꿔 넣을 부분은 [대괄호]로 표시
+- 민감정보를 넣지 말라는 주의사항 포함`,
+  },
+  {
+    title: "실습 산출물 만들기",
+    desc: "교시별 실습 결과물을 빠르게 초안화할 때 사용합니다.",
+    prompt: `너는 교육 실습 퍼실리테이터야.
+다음 실습을 수행할 수 있도록 복사해서 쓸 수 있는 프롬프트와 작성 양식을 만들어줘.
+
+실습명: ${lessonItem.activity.title}
+최종 결과물: ${lessonItem.activity.output}
+참고 주제: ${lessonItem.topic}
+내가 가진 자료: [메모, 회의록, 보고서 초안, 데이터 설명 등을 붙여넣기]
+
+출력 형식:
+1. 실습 시작 프롬프트
+2. 입력 자료 정리 양식
+3. 결과물 초안 작성 프롬프트
+4. 결과물 검토 프롬프트
+5. 수정 요청 프롬프트
+
+조건:
+- 각 프롬프트는 바로 복사해서 실행할 수 있게 작성
+- 빈칸은 [ ] 형태로 남기기
+- 결과물 검토 기준을 5개 이상 포함`,
+  },
+  {
+    title: "AI 결과물 검토하기",
+    desc: "AI가 만든 답변을 그대로 쓰기 전에 누락, 오류, 위험을 확인합니다.",
+    prompt: `다음 AI 결과물을 실무 사용 전 검토해줘.
+
+검토 기준:
+- 강의 주제와 맞는가: ${lessonItem.topic}
+- 수업 목표를 충족하는가: ${lessonItem.goals.join(" / ")}
+- 사실 확인이 필요한 문장이 있는가
+- 개인정보, 보안, 저작권 위험이 있는가
+- 바로 실행하기 어려운 모호한 표현이 있는가
+
+AI 결과물:
+[AI가 만든 답변을 붙여넣기]
+
+출력 형식:
+1. 바로 사용할 수 있는 부분
+2. 수정이 필요한 부분
+3. 확인해야 할 사실 또는 근거
+4. 위험하거나 삭제해야 할 표현
+5. 개선된 최종본`,
+  },
+]
 
 function CourseView({ selectedLevelId }) {
   const [activeTrackId, setActiveTrackId] = useState(getTrackIdByLevelId(selectedLevelId))
@@ -217,13 +287,16 @@ function CourseView({ selectedLevelId }) {
 
         <Accordion title="교시별 상세 강의자료" defaultOpen>
           <div className="space-y-4">
-            {activeLevel.lessons.map((lessonItem, index) => (
-              <article
-                key={lessonItem.title}
-                id={getLessonId(index)}
-                tabIndex={-1}
-                className="scroll-mt-24 rounded-lg border border-slate-200 bg-white p-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              >
+            {activeLevel.lessons.map((lessonItem, index) => {
+              const lessonPromptExamples = createLessonPromptExamples(lessonItem)
+
+              return (
+                <article
+                  key={lessonItem.title}
+                  id={getLessonId(index)}
+                  tabIndex={-1}
+                  className="scroll-mt-24 rounded-lg border border-slate-200 bg-white p-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
                 <p className="text-sm font-black text-indigo-700">{index + 1}교시 강의자료</p>
                 <h4 className="mt-1 text-xl font-black text-slate-950">{lessonItem.title}</h4>
 
@@ -300,6 +373,32 @@ function CourseView({ selectedLevelId }) {
                   </div>
                 </div>
 
+                <div className="mt-5 rounded-lg border border-indigo-100 bg-indigo-50 p-3">
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                      <p className="text-base font-black text-indigo-950">복사해서 쓰는 프롬프트 사례</p>
+                      <p className="mt-1 text-sm font-bold leading-6 text-indigo-800">교시 주제와 실습 산출물에 맞춘 예시입니다.</p>
+                    </div>
+                    <p className="text-xs font-black text-indigo-700">{lessonPromptExamples.length}개</p>
+                  </div>
+                  <div className="mt-3 space-y-3">
+                    {lessonPromptExamples.map((promptExample) => (
+                      <section key={promptExample.title} className="rounded-lg bg-white p-3">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                          <div>
+                            <h5 className="text-base font-black text-slate-950">{promptExample.title}</h5>
+                            <p className="mt-1 text-sm font-bold leading-6 text-slate-600">{promptExample.desc}</p>
+                          </div>
+                          <CopyButton text={promptExample.prompt} label="프롬프트 복사" />
+                        </div>
+                        <pre className="mt-3 max-h-80 overflow-auto whitespace-pre-wrap break-words rounded-lg bg-slate-950 p-4 text-sm leading-6 text-white">
+                          {promptExample.prompt}
+                        </pre>
+                      </section>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="mt-5 rounded-lg bg-teal-50 p-3">
                   <p className="text-base font-black text-teal-900">실습: {lessonItem.activity.title}</p>
                   <ul className="mt-2 space-y-2">
@@ -334,12 +433,16 @@ function CourseView({ selectedLevelId }) {
                     ))}
                   </ul>
                 </div>
-              </article>
-            ))}
+                </article>
+              )
+            })}
           </div>
         </Accordion>
 
         <Accordion title={supportMaterials.templateTitle}>
+          <div className="mb-3 flex justify-end">
+            <CopyButton text={supportMaterials.template} label="대표 프롬프트 복사" />
+          </div>
           <pre className="whitespace-pre-wrap break-words rounded-lg bg-slate-950 p-4 text-sm leading-6 text-white">
             {supportMaterials.template}
           </pre>
